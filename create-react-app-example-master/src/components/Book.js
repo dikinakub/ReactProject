@@ -1,97 +1,98 @@
 import React,{Component} from "react";
 import {Card,Form,Button,Col} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faPlusSquare, faUndo} from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 const iconsFaSave = <FontAwesomeIcon icon={faSave} />
 const iconsFaPlusSquare = <FontAwesomeIcon icon={faPlusSquare} />
+const iconsFaUndo = <FontAwesomeIcon icon={faUndo} />
 
 export default class Book extends Component {
   
   constructor(props){
       super(props);
-      this.state = {title:'', author:'', coverPhotoURL:'', isbnNumber:'', price:'', language:''}
+      this.state = this.initialState;
       this.bookChange = this.bookChange.bind(this);
       this.submitBook = this.submitBook.bind(this);
   }
-  submitBook(event){
-    alert('Title: '+this.state.title +'\nAuthor: '+this.state.author+'\nCoverPhotoURL: '+this.state.coverPhotoURL+'\nISBN Number: '+this.state.isbnNumber+'\nPrice: '+this.state.price+'\nLanguage: '+this.state.language);
-    event.preventDefault();
+  initialState = {
+    isName:'', 
+    imgURL:''
   }
-  bookChange(event){
+  resetBook = () => {
+    this.setState(() => this.initialState);
+  }
+  submitBook = event =>{
+    event.preventDefault();
+    const book = {
+      isName: this.state.isName,
+      imgURL: this.state.imgURL,
+    };
+    axios.post("http://localhost:8080/insertUserRole", book)
+      .then(response => {     
+          console.log(response.data);
+          if(response.data != null){
+              this.setState(this.initialState);
+              alert("Add data is successfully");
+          }
+      });  
+  }
+  bookChange = event =>{
     this.setState({
       [event.target.name]:event.target.value
     });
   }
+
   render() {
+    const {isName, imgURL} = this.state;
+
     return (
       <Card className={"border border-dark bg-dark text-white"}>
         <Card.Header>{iconsFaPlusSquare} Add New Book</Card.Header>
-        <Form onSubmit={this.submitBook} id="bookFormId">
+        <Form onReset={this.resetBook} onSubmit={this.submitBook} id="bookFormId">
           <Card.Body>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridTitle">
-                    <Form.Label>Title</Form.Label>
-                    <Form.Control  required
-                        type="text" name="title"
-                        value={this.state.title}
-                        onChange={this.bookChange}
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control  required autoComplete="off"
+                        type="text" name="isName"
+                        value={isName} onChange={this.bookChange}
                         className="bg-dark text-white"
-                        placeholder="Enter Book Title"/>
+                        placeholder="Enter Your Name"/>
                 </Form.Group>
                 <Form.Group as={Col} controlId="formGridAuthor">
-                    <Form.Label>Author</Form.Label>
-                    <Form.Control required
-                        type="text" name="author"
-                        value={this.state.author}
-                        onChange={this.bookChange}
+                    <Form.Label>Image URL.</Form.Label>
+                    <Form.Control required autoComplete="off"
+                        type="text" name="imgURL"
+                        value={imgURL} onChange={this.bookChange}
                         className="bg-dark text-white"
-                        placeholder="Enter Book Author"/>
+                        placeholder="Enter Image URL."/>
                 </Form.Group>
               </Form.Row>
-              <Form.Row>
+              {/* <Form.Row>
                 <Form.Group as={Col} controlId="formGridCoverPhotoURL">
                     <Form.Label>Cover Photo URL</Form.Label>
-                    <Form.Control required
+                    <Form.Control required autoComplete="off"
                         type="text" name="coverPhotoURL"
-                        value={this.state.coverPhotoURL}
-                        onChange={this.bookChange}
+                        value={coverPhotoURL} onChange={this.bookChange}
                         className="bg-dark text-white"
                         placeholder="Enter Book Cover Photo URL"/>
                 </Form.Group>
                 <Form.Group as={Col} controlId="formGridISBNNumber">
                     <Form.Label>ISBN Number</Form.Label>
-                    <Form.Control required
+                    <Form.Control required autoComplete="off"
                         type="text" name="isbnNumber"
-                        value={this.state.isbnNumber}
-                        onChange={this.bookChange}
+                        value={isbnNumber} onChange={this.bookChange}
                         className="bg-dark text-white"
                         placeholder="Enter Book ISBN Number"/>
                 </Form.Group>
-              </Form.Row>
-              <Form.Row>
-                <Form.Group as={Col} controlId="formGridPrice">
-                    <Form.Label>Price</Form.Label>
-                    <Form.Control required
-                        type="text" name="price"
-                        value={this.state.price}
-                        onChange={this.bookChange}
-                        className="bg-dark text-white"
-                        placeholder="Enter Book Price"/>
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridLanguage">
-                    <Form.Label>Language</Form.Label>
-                    <Form.Control required
-                        type="text" name="language"
-                        value={this.state.language}
-                        onChange={this.bookChange}
-                        className="bg-dark text-white"
-                        placeholder="Enter Book Language	"/>
-                </Form.Group>
-              </Form.Row>
+              </Form.Row> */}
+
           </Card.Body>
           <Card.Footer style={{"textAlign":"right"}}>
-            <Button size="sm" variant="success" type="submit">{iconsFaSave} Submit</Button>       
+            <Button size="sm" variant="success" type="submit">{iconsFaSave} Submit</Button> {' '}
+            <Button size="sm" variant="info" type="reset">{iconsFaUndo} Reset</Button>      
           </Card.Footer>
         </Form>
       </Card>      

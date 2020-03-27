@@ -1,18 +1,29 @@
 package com.example.demo;
-import com.example.demo.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 import java.util.stream.Collectors;
-import com.example.demo.UserRole;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 @CrossOrigin(origins = "*")
+
 public class UserRoleController {
     @Autowired private UserRoleRepository userRoleRepository;
 
-    @PostMapping("/insertUserRole/{name}/{imgURL}")
-    public UserRole insertUserRole(@PathVariable String name,@PathVariable String imgURL) {
+    @PostMapping(path = "/insertUserRole")
+    public UserRole insertUserRole(@RequestBody Map<String,String> body){
+
+        String isName = body.get("isName").toString();
+        String imgURL = body.get("imgURL").toString();
+
         UserRole userRole = new UserRole();
-        userRole.setName(name);
+        userRole.setName(isName);
         userRole.setImgURL(imgURL);
         userRoleRepository.save(userRole);
         return userRole;
