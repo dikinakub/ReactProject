@@ -1,19 +1,39 @@
-import React, {Component} from "react";
-import {Jumbotron, Button} from "react-bootstrap";
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { Component } from "react";
+import { Card, Col, Form, FormControl, ListGroup ,ListGroupItem} from "react-bootstrap";
+
+const iconsFaShoppingCart = <FontAwesomeIcon icon={faShoppingCart} />
+
 
 export default class Welcome extends Component {
   render() {
     return (
-        <Jumbotron className="bg-dark text-white">
-        <h1>Welcome to New Baby</h1>
-        <p>
-          This is a simple hero unit, a simple jumbotron-style component for calling
-          extra attention to featured content or information.
-        </p>
-        <p>
-          <Button variant="primary">Learn more</Button>
-        </p>
-      </Jumbotron>
+      <Card className={"border border-dark bg-dark text-white"}>
+          <Card.Header className="text-white">{iconsFaShoppingCart} Payment</Card.Header>
+          <Card.Body>
+            <Form>
+              <Form.Row>
+                <Form.Group as={Col} >
+                  <FormControl type="text" placeholder="Enter Product Code"></FormControl>                   
+                </Form.Group>
+              </Form.Row>
+            </Form>
+            
+            </Card.Body>
+          <Card.Footer>
+          <ListGroup className="list-group-flush">
+              <ListGroupItem>
+              
+              </ListGroupItem>
+              <ListGroupItem>
+              
+              </ListGroupItem>
+              <ListGroupItem>Vestibulum at eros</ListGroupItem>
+            </ListGroup>
+          </Card.Footer>
+      </Card>
+
     );
   }
 }
