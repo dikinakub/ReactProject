@@ -77,8 +77,12 @@ public class ProductStockController {
         ProductStock productStock = productStockRepository.findById(ProductID).get();
         productStockRepository.delete(productStock);
         return null;
-    }
+    }   
 
+    @GetMapping(path = "/searchProduct/{dataSearch}")
+    public Iterable<ProductStock> searchProduct(@PathVariable String dataSearch) {
+        return this.productStockRepository.searchProduct(dataSearch);
+    }
 
    
 
